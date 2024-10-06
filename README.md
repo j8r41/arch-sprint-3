@@ -1,74 +1,27 @@
-# Базовая настройка
+# Sprint 3
 
-## Запуск minikube
+## Задание 1: Анализ и проектирование
 
-[Инструкция по установке](https://minikube.sigs.k8s.io/docs/start/)
+### Подзадание 1.1: Анализ и планирование
 
-```bash
-minikube start
-```
+#### Схема управления отоплением:
 
+![Схема управления отоплением](schemas/img/task1-1.png)
+[C4](schemas/task1-1.puml)
 
-## Добавление токена авторизации GitHub
+#### Анализ архитектуры монолитного приложения:
 
-[Получение токена](https://github.com/settings/tokens/new)
+1. Язык программирования: Java
+2. База данных: PostgreSQL
+3. Архитектура: Монолитная, все компоненты системы (обработка запросов, бизнес-логика, работа с данными) находятся в рамках одного приложения.
+4. Взаимодействие: Синхронное, запросы обрабатываются последовательно.
+5. Масштабируемость: Ограничена, так как монолит сложно масштабировать по частям.
+6. Развертывание: Требует остановки всего приложения.
 
-```bash
-kubectl create secret docker-registry ghcr --docker-server=https://ghcr.io --docker-username=<github_username> --docker-password=<github_token> -n default
-```
+#### Домены:
 
-
-## Установка API GW kusk
-
-[Install Kusk CLI](https://docs.kusk.io/getting-started/install-kusk-cli)
-
-```bash
-kusk cluster install
-```
-
-
-## Настройка terraform
-
-[Установите Terraform](https://yandex.cloud/ru/docs/tutorials/infrastructure-management/terraform-quickstart#install-terraform)
-
-
-Создайте файл ~/.terraformrc
-
-```hcl
-provider_installation {
-  network_mirror {
-    url = "https://terraform-mirror.yandexcloud.net/"
-    include = ["registry.terraform.io/*/*"]
-  }
-  direct {
-    exclude = ["registry.terraform.io/*/*"]
-  }
-}
-```
-
-## Применяем terraform конфигурацию 
-
-```bash
-cd terraform
-terraform apply
-```
-
-## Настройка API GW
-
-```bash
-kusk deploy -i api.yaml
-```
-
-## Проверяем работоспособность
-
-```bash
-kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 8080:80
-curl localhost:8080/hello
-```
-
-
-## Delete minikube
-
-```bash
-minikube delete
-```
+| Управление отоплением                                     | Мониторинг температуры                                      |
+| --------------------------------------------------------- | ----------------------------------------------------------- |
+| Пользователи включают и выключают отопление в своих домах | Система отопления получает данные о температуре с датчиков  |
+| Пользователи устанавливают температуру                    | Пользователи получают текущую температуру через приложение. |
+| Система отопления поддерживает заданную температуру       |                                                             |

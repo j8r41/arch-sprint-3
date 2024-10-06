@@ -1,0 +1,11 @@
+@startuml taks-1-1
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "Пользователь", "Клиент приложения")
+System_Ext(modules, "Система устройств", "Модули для управления отоплением")
+System(system, "Система отопления", "Приложение управления отоплением")
+
+Rel(user, system, "Управляет отоплением дома")
+Rel(system, modules, "Запрос данных с устройств")
+
+@enduml
