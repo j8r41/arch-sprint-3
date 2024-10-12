@@ -1,0 +1,23 @@
+@startuml Управление отоплением С4-Component-Users
+title Управление отоплением С4-Component-Users
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+System_Boundary(system, "Система отопления") {
+    Container(apiGateway, "АPI Gateway", "Kusk", "Маршрутизация, аутентификация, балансирока нагрузки")
+
+    Container(userService, "Управление пользователями", "FastAPI") {
+        Component(userController, "Контроллер", "Обработка запросов управления устройствами")
+        Component(userLogic, "Сервис", "Бизнес логика")
+        Component(userRepo, "Репозиторий", "Запросы к БД")
+        Rel(userLogic, userRepo, "")
+        Rel(userController, userLogic, "")
+    }
+    ContainerDb(userDb, "БД", "PostgreSQL")
+    Rel(apiGateway, userController, "Управление пользователями", "REST")
+}
+Rel(userRepo, userDb, "Чтение / создание")
+
+
+@enduml
