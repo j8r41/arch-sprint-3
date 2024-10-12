@@ -1,0 +1,32 @@
+@startuml Telemetry
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+package "Telemetry" {
+    class TelemetryData {
+        +UUID id
+        +UUID device_id
+        +float temperature
+    }
+    class TelemetryController {
+        + get_telemetry(UUID device_id) -> TelemetryData
+    }
+
+    class TelemetryService {
+        + get_telemetry(UUID device_id) -> TelemetryData
+    }
+
+    class KafkaTelemetryRepository {
+        + get_telemetry(UUID device_id) -> TelemetryData
+    }
+
+    class PostgreSQlTelemetryRepository {
+        + create_telemetry(TelemetryData)
+    }
+
+    TelemetryController --> TelemetryData
+    TelemetryController --> TelemetryService
+    TelemetryService --> KafkaTelemetryRepository
+    TelemetryService --> PostgreSQlTelemetryRepository
+}
+@enduml

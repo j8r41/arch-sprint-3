@@ -20,7 +20,6 @@ System_Boundary(system, "Система отопления") {
     Rel_R(kafka, telemetryConsumer, "Телеметрия")
 }
 System_Ext(device, "Устройство", "API устройств", )
-Rel(kafka, device, "Команды")
 Rel(device, kafka, "Телеметрия")
 Rel(telemetryRepo, telemetryDb, "Чтение / создание")
 

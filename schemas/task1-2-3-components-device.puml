@@ -22,7 +22,6 @@ System_Boundary(system, "Система отопления") {
 }
 System_Ext(device, "Устройство", "API устройств", )
 Rel(kafka, device, "Команды")
-Rel(device, kafka, "Устройства")
 Rel(deviceRepo, deviceDb, "Чтение / создание")
 
 @enduml
