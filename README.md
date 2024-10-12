@@ -114,3 +114,10 @@
 #### Построение ER-диаграммы:
 
 - [ER-диаграмма](schemas/task1-3.puml)
+
+### Подзадание 1.4: Создание и документирование API
+
+#### REST API:
+
+- [REST API](schemas/open-api.yaml)
+- [AsyncAPI](schemas/async-api.yaml)
