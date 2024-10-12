@@ -10,7 +10,6 @@ Boundary(person, "Приложение") {
 
 Boundary(system, "Система отопления") {
     Container(apiGateway, "АPI Gateway", "Kusk", "Маршрутизация, аутентификация, балансирока нагрузки")
-
     Container(telemetryService, "Телеметрия", "FastAPI", "Обработка данных с датчиков")
     Container(deviceService, "Управление устройствами", "FastAPI", "Управление отоплением, поддержание температуры")
     Container(userService, "Управление пользователями", "FastAPI", "Управление пользователями")
