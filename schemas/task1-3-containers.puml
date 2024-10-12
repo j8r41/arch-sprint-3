@@ -1,0 +1,46 @@
+@startuml Управление отоплением С4-Container
+title Управление отоплением С4-Container
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+
+Boundary(person, "Приложение") {
+    Person(user, "Пользователь", "Управляет отоплением через приложение")
+}
+
+Boundary(system, "Система отопления") {
+    Container(apiGateway, "АPI Gateway", "Kusk", "Маршрутизация, аутентификация, балансирока нагрузки")
+
+    Container(telemetryService, "Телеметрия", "FastAPI", "Обработка данных с датчиков")
+    Container(deviceService, "Управление устройствами", "FastAPI", "Управление отоплением, поддержание температуры")
+    Container(userService, "Управление пользователями", "FastAPI", "Управление пользователями")
+
+
+
+    ContainerDb(telemetryDb, "БД", "PostgreSQL")
+    ContainerDb(deviceDb, "БД", "PostgreSQL")
+    ContainerDb(userDb, "БД", "PostgreSQL")
+    ContainerQueue(kafka, "Шина", "Kafka")
+
+    Rel(apiGateway, telemetryService, "Получить  данные телеметрии", "REST")
+    Rel(apiGateway, deviceService, "Управление устройствами", "REST")
+    Rel(apiGateway, userService, "Управление пользователем", "REST")
+
+    Rel(deviceService, kafka, "Команды")
+    Rel_L(kafka, telemetryService, "Телеметрия")
+    Rel(deviceService, deviceDb, "Чтение / создание")
+    Rel(telemetryService, telemetryDb, "Чтение / создание")
+    Rel(userService, userDb, "Чтение / создание")
+
+}
+
+Boundary(devices, "Устройства") {
+    System_Ext(device, "Устройство", "API устройств")
+}
+
+Rel(kafka, device, "Команды")
+Rel(device, kafka, "Телеметрия")
+
+Rel(user, apiGateway, "Посылает запросы", "REST")
+
+@enduml
