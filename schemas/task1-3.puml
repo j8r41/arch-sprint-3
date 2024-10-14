@@ -56,9 +56,9 @@ entity Telemetry {
     * data
 }
 
-Telemetry --> Device
-House --> User
-Module --> House
-Module -->DeviceType
-Device --> Module
+User ---{ House
+House ---{ Module
+Module ---{ DeviceType
+Module ---{  Device
+Device ---{ Telemetry
 @enduml
