@@ -1,0 +1,64 @@
+@startuml ER-Diagram
+
+entity House {
+    * id
+    --
+    * user_id
+    --
+    * address
+}
+
+entity User {
+    * id
+    --
+    * name
+    --
+    * surname
+}
+
+entity Module {
+    * id
+    --
+    * house_id
+    --
+    * device_type_id
+    --
+    * serial_number
+    ---
+    * title
+}
+
+entity DeviceType {
+    * id
+    --
+    * code
+    --
+    * description
+}
+
+entity Device {
+    * id
+    --
+    * module_id
+    --
+    * serial_number
+    --
+    * status
+}
+
+entity Telemetry {
+    * id
+    --
+    * device_id
+    --
+    * datetime
+    --
+    * data
+}
+
+User ||--o{ House
+House ||--o{ Module
+Module ||--o{ DeviceType
+Module ||--o{  Device
+Device ||--o{ Telemetry
+@enduml

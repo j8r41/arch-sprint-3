@@ -1,0 +1,27 @@
+@startuml Управление отоплением С4-Component-Telemetry
+title Управление отоплением С4-Component-Telemetry
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+System_Boundary(system, "Система отопления") {
+    Container(apiGateway, "АPI Gateway", "Kusk", "Маршрутизация, аутентификация, балансирока нагрузки")
+    Container(telemetryService, "Телеметрия", "FastAPI", "Обработка данных с датчиков") {
+        Component(telemetryController, "Контроллер", "Обработка запросов телеметрии")
+        Component(telemetryLogic, "Сервис", "Бизнес логика")
+        Component(telemetryRepo, "Репозиторий", "Запросы к БД")
+        Component(telemetryConsumer, "Обработчик очереди телеметрии", "Kafka Consumer")
+        Rel(telemetryController, telemetryLogic, "")
+        Rel(telemetryLogic, telemetryRepo, "")
+        Rel(telemetryConsumer, telemetryLogic, "")
+    }
+    ContainerDb(telemetryDb, "БД", "PostgreSQL")
+    ContainerQueue(kafka, "Шина", "Kafka")
+    Rel(apiGateway, telemetryController, "Телеметрия", "REST")
+    Rel_R(kafka, telemetryConsumer, "Телеметрия")
+}
+System_Ext(device, "Устройство", "API устройств", )
+Rel(device, kafka, "Телеметрия")
+Rel(telemetryRepo, telemetryDb, "Чтение / создание")
+
+
+@enduml

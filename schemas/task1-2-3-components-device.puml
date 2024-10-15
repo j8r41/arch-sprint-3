@@ -1,0 +1,27 @@
+@startuml Управление отоплением С4-Component-Device
+title Управление отоплением С4-Component-Device
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+System_Boundary(system, "Система отопления") {
+    Container(apiGateway, "АPI Gateway", "Kusk", "Маршрутизация, аутентификация, балансирока нагрузки")
+    Container(deviceService, "Управление устройствами", "FastAPI", "Обработка данных с датчиков") {
+        Component(deviceController, "Контроллер", "Обработка запросов управления устройствами")
+        Component(deviceLogic, "Сервис", "Бизнес логика")
+        Component(deviceRepo, "Репозиторий", "Запросы к БД")
+        Component(deviceCommandSender, "Отправление команд", "Kafka Consumer")
+        Rel(deviceLogic, deviceCommandSender, "")
+        Rel(deviceLogic, deviceRepo, "")
+        Rel(deviceController, deviceLogic, "")
+    }
+    ContainerDb(deviceDb, "БД", "PostgreSQL")
+    ContainerQueue(kafka, "Шина", "Kafka")
+    Rel(apiGateway, deviceController, "Управление устройствами", "REST")
+    Rel(deviceCommandSender, kafka, "Команды")
+}
+System_Ext(device, "Устройство", "API устройств", )
+Rel(kafka, device, "Команды")
+Rel(deviceRepo, deviceDb, "Чтение / создание")
+
+@enduml
